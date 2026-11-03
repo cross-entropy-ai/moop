@@ -7,8 +7,14 @@ Moop is a thin client for [audio-transcribe](https://github.com/Junyi-99/audio-t
 ## Install
 
 ```sh
-go install github.com/cross-entropy-ai/moop@latest
+brew install cross-entropy-ai/tap/moop
 ```
+
+Upgrade with `brew upgrade moop`. Prebuilt for macOS and Linux on arm64 and amd64; or `go install github.com/cross-entropy-ai/moop@latest`, or download an archive from [Releases](https://github.com/cross-entropy-ai/moop/releases).
+
+## Release
+
+Push a tag like `v0.1.0`. The release workflow runs the tests, builds the archives with `scripts/release.py`, and publishes them with `moop.rb` and `checksums.txt`; the tap picks up `moop.rb` within half an hour.
 
 ## Sign in
 
