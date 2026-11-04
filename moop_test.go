@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -260,5 +261,27 @@ func TestSavedTokenIsPerServer(t *testing.T) {
 	}
 	if c, _ := resolve("https://b.example/"); c.Server != "https://b.example" || c.Token != "" {
 		t.Errorf("other server must not get a's token: %+v", c)
+	}
+}
+
+// TestMeepCommand runs the documented Run After Saving line the way Meep does
+// (sh -c '<command> "$1"' with the folder as $1) and checks moop would get
+// exactly one recording.
+func TestMeepCommand(t *testing.T) {
+	cmd := strings.Replace(meepCommand, "/opt/homebrew/bin/moop", `printf '%s\n'`, 1)
+	out, err := exec.Command("/bin/sh", "-c", cmd+` "$1"`, "meep-after-save", "/rec dir").Output()
+	if err != nil {
+		t.Fatal(err)
+	}
+	args := strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
+	p, err := transcribeSpec.parse(args)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(p.positional) != 1 || p.positional[0] != "/rec dir" || p.values["output"] != "/rec dir/transcript.txt" {
+		t.Errorf("Meep would run moop with %q", args)
+	}
+	if !strings.Contains(helpText, meepCommand) {
+		t.Error("help text should show meepCommand")
 	}
 }

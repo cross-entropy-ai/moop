@@ -70,10 +70,10 @@ Any unique id prefix works. If you interrupt `moop <file>`, the job keeps runnin
 Meep › Preferences › Agent › Run After Saving:
 
 ```sh
-/opt/homebrew/bin/moop -s meeting -o "$1/transcript.txt" "$1"
+/opt/homebrew/bin/moop -s meeting -o "$1/transcript.txt"
 ```
 
-Every recording then gets a `transcript.txt` next to its `mixed.m4a`.
+Meep adds the recording folder to the end of the command (it is also `$1`), so the command must not name it again. Every recording then gets a `transcript.txt` next to its `mixed.m4a`. More recipes, such as a summary by an agent: [Meep › Recipes](https://github.com/cross-entropy-ai/meep#recipes).
 
 ## License
 

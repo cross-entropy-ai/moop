@@ -27,6 +27,10 @@ const (
 	exitSignal  = 130
 )
 
+// meepCommand is the Run After Saving line for Meep, which runs it as
+// zsh -lc '<command> "$1"' with the recording folder as $1.
+const meepCommand = `/opt/homebrew/bin/moop -s meeting -o "$1/transcript.txt"`
+
 const helpText = `moop — transcribe audio, e.g. Meep recordings.
 
 USAGE
@@ -86,7 +90,8 @@ CONVENTIONS
 
 WITH MEEP
   Preferences › Agent › Run After Saving:
-    /opt/homebrew/bin/moop -s meeting -o "$1/transcript.txt" "$1"
+    ` + meepCommand + `
+  Meep adds the recording folder to the end of the command (it is also $1).
 `
 
 func main() {
